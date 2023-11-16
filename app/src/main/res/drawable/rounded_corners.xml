@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/brown"/> <!-- Background color of the view -->
+    <corners android:radius="10dp"/> <!-- Specify the corner radius here -->
+    <!-- Optional: Define a border -->
+    <stroke
+        android:width="10dp"
+        android:color="@color/dark_brown"/> <!-- Border color -->
+</shape>
