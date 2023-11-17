@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
@@ -15,40 +14,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/scoreLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+    <EditText
+        android:id="@+id/GB_scoreNumberTV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fontFamily="@font/baloo_bhai_2_bold"
+        android:inputType="number"
         android:shadowColor="@color/dark_brown"
         android:shadowDx="6"
         android:shadowDy="6"
         android:shadowRadius="5"
-        android:text="ScoreLabel"
-        android:textColor="@color/beige"
-
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view" />
-
-
-    <EditText
-        android:id="@+id/editTextNumber"
-        android:layout_width="214dp"
-        android:layout_height="213dp"
-        android:ems="10"
-        android:fontFamily="@font/baloo_bhai_2_bold"
-        android:inputType="number"
-        android:text="0"
+        android:text="@string/scoreNumber"
         android:textAlignment="center"
         android:textColor="@color/light_beige"
-        android:textSize="150sp"
-        tools:layout_editor_absoluteX="73dp"
-        tools:layout_editor_absoluteY="242dp" />
+        android:textSize="130sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@id/view"
+        app:layout_constraintRight_toRightOf="@id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="@string/blockPoints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
