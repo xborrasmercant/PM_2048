@@ -3,5 +3,4 @@
     <string name="scorelabel">ScoreLabel</string>
     <string name="scoreNumber">000000</string>
     <string name="blockPoints">0</string>
-    <string name="blockSize">80sp</string>
 </resources>

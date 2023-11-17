@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/GG_backgroundView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/rounded_corners"
@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view" />
+        app:layout_constraintTop_toTopOf="@+id/GG_backgroundView" />
 
     <EditText
         android:id="@+id/SB_scoreNumberTV"
@@ -51,10 +51,10 @@
         android:textAlignment="center"
         android:textColor="@color/light_beige"
         android:textSize="95sp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintBottom_toBottomOf="@+id/GG_backgroundView"
+        app:layout_constraintEnd_toEndOf="@+id/GG_backgroundView"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/GG_backgroundView"
         app:layout_constraintTop_toBottomOf="@+id/SB_scoreLabel"
         app:layout_constraintVertical_bias="0.091" />
 </androidx.constraintlayout.widget.ConstraintLayout>
