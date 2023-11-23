@@ -8,9 +8,6 @@
         android:id="@+id/SB_backgroundView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="280dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
@@ -23,42 +20,49 @@
     <TextView
         android:id="@+id/SB_scoreLabel"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="50dp"
-        android:autoSizeMaxTextSize="200sp"
-        android:autoSizeMinTextSize="20sp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+
+        android:layout_marginEnd="16dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="@font/baloo_bhai_2_bold"
+        android:gravity="center"
         android:shadowColor="@color/dark_brown"
+
         android:shadowDx="6"
         android:shadowDy="6"
         android:shadowRadius="5"
         android:text="@string/scorelabel"
         android:textAlignment="center"
         android:textColor="@color/beige"
-        app:layout_constraintBottom_toBottomOf="@id/SB_backgroundView"
+        app:layout_constraintBottom_toTopOf="@+id/SB_scoreNumberTV"
         app:layout_constraintEnd_toEndOf="@id/SB_backgroundView"
         app:layout_constraintStart_toStartOf="@id/SB_backgroundView"
+        app:layout_constraintTop_toTopOf="@id/SB_backgroundView" />
 
-
-        app:layout_constraintTop_toTopOf="@id/SB_backgroundView"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
+    <TextView
         android:id="@+id/SB_scoreNumberTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        android:autoSizeMaxTextSize="200sp"
-        android:autoSizeMinTextSize="35sp"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_marginStart="16dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="16sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="@font/baloo_bhai_2_bold"
-        android:inputType="number"
+        android:gravity="center"
         android:shadowColor="@color/dark_brown"
         android:shadowDx="6"
         android:shadowDy="6"
@@ -66,10 +70,9 @@
         android:text="@string/scoreNumber"
         android:textAlignment="center"
         android:textColor="@color/light_beige"
-        app:layout_constraintBottom_toBottomOf="@id/SB_backgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/SB_backgroundView"
         app:layout_constraintEnd_toEndOf="@id/SB_backgroundView"
         app:layout_constraintStart_toStartOf="@id/SB_backgroundView"
-        app:layout_constraintTop_toTopOf="@id/SB_scoreLabel"
+        app:layout_constraintTop_toBottomOf="@id/SB_scoreLabel" />
 
-        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
