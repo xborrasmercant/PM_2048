@@ -7,35 +7,6 @@
     tools:context=".MainActivity">
 
 
-
-    <include
-        android:id="@+id/MainCurrentScoreNumber"
-        layout="@layout/score_box"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toTopf="@id/MainGameGrid"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/MainBestScoreNumber"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/MainBestScoreNumber"
-        layout="@layout/score_box"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-
-        app:layout_constraintBottom_toTopf="@id/MainGameGrid"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@id/MainCurrentScoreNumber"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-
     <include
         android:id="@+id/MainGameGrid"
         layout="@layout/game_grid"
@@ -49,6 +20,36 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <include
+        android:id="@+id/MainCurrentScoreNumber"
+        layout="@layout/score_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/MainBestScoreNumber"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/MainGameGrid"
+        />
+
+
+    <include
+        android:id="@+id/MainBestScoreNumber"
+        layout="@layout/score_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+
+        app:layout_constraintBottom_toTopOf="@id/MainGameGrid"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toRightOf="@id/MainCurrentScoreNumber"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
     />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
