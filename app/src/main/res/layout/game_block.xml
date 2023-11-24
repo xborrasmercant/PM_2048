@@ -2,19 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/GameBlockLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/GG_backgroundView"
+        android:id="@+id/GB_backgroundView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/rounded_corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/GB_scoreNumberTV"
@@ -33,17 +35,10 @@
         android:shadowRadius="5"
         android:textAlignment="center"
         android:textColor="@color/light_beige"
-        app:layout_constraintBottom_toBottomOf="@+id/GG_backgroundView"
-        app:layout_constraintLeft_toLeftOf="@id/GG_backgroundView"
-        app:layout_constraintRight_toRightOf="@id/GG_backgroundView"
-        app:layout_constraintTop_toTopOf="@+id/GG_backgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/GB_backgroundView"
+        app:layout_constraintStart_toStartOf="@id/GB_backgroundView"
+        app:layout_constraintEnd_toEndOf="@id/GB_backgroundView"
+        app:layout_constraintTop_toTopOf="@+id/GB_backgroundView"
         tools:text="@string/blockPoints" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="top"
-        app:constraint_referenced_ids="GB_scoreNumberTV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
