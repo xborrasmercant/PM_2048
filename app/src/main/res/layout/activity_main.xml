@@ -27,13 +27,15 @@
         layout="@layout/score_box"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toTopOf="@id/MainGameGrid"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/MainBestScoreNumber"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/MainGameGrid"
-        />
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <include
@@ -41,14 +43,16 @@
         layout="@layout/score_box"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
 
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toTopOf="@id/MainGameGrid"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toRightOf="@id/MainCurrentScoreNumber"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-    />
+        app:layout_constraintVertical_bias="0.0" />
 
 
 

@@ -6,23 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/GB_backgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_corners"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <TextView
         android:id="@+id/GB_scoreNumberTV"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="24dp"
+        android:layout_margin="4dp"
         android:autoSizeMaxTextSize="200sp"
         android:autoSizeMinTextSize="35sp"
         android:autoSizeStepGranularity="2sp"
@@ -35,10 +23,16 @@
         android:shadowRadius="5"
         android:textAlignment="center"
         android:textColor="@color/light_beige"
-        app:layout_constraintBottom_toBottomOf="@+id/GB_backgroundView"
-        app:layout_constraintStart_toStartOf="@id/GB_backgroundView"
-        app:layout_constraintEnd_toEndOf="@id/GB_backgroundView"
-        app:layout_constraintTop_toTopOf="@+id/GB_backgroundView"
-        tools:text="@string/blockPoints" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/blockPoints"
+        android:background="@drawable/rounded_corners"
+        tools:background="@color/brown"
+
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
