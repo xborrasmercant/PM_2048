@@ -1,29 +1,37 @@
 package com.example.a2048;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
-public class MainActivity extends AppCompatActivity {
+public class GameBlock extends Fragment {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    private String GameBlockID;
 
-        changeBlockValue("128");
+    public GameBlock (String GameBlockID) {
+        this.GameBlockID = GameBlockID;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_grid, container, false);
+
+        return view;
+    }
 
     public void changeBlockValue(String value) {
-        View block1 = findViewById(R.id.gameBlock1);
-        TextView bTextView = block1.findViewById(R.id.blockValue);
+        TextView bTextView = findViewById(R.id.blockValue);
         bTextView.setText(value);
 
         int backgroundColorResId, textColorResID;
@@ -91,4 +99,5 @@ public class MainActivity extends AppCompatActivity {
         bTextView.setTextColor(TextColor);
         bTextView.setBackgroundColor(BGColor);
     }
+
 }

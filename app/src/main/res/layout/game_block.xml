@@ -7,31 +7,29 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/GB_scoreNumberTV"
+        android:id="@+id/blockValue"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        android:autoSizeMaxTextSize="200sp"
+        android:autoSizeMaxTextSize="45sp"
         android:autoSizeMinTextSize="35sp"
-        android:autoSizeStepGranularity="2sp"
+        android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
+        android:background="@color/tier1_1"
         android:fontFamily="@font/baloo_bhai_2_bold"
         android:gravity="center"
-        android:shadowColor="@color/dark_brown"
+        tools:text="@string/blockPoints"
+        android:textAlignment="center"
+        android:textColor="@color/dark_text"
+        android:shadowColor="@color/shadowColor"
         android:shadowDx="6"
         android:shadowDy="6"
         android:shadowRadius="5"
-        android:textAlignment="center"
-        android:textColor="@color/light_beige"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/blockPoints"
-        android:background="@drawable/rounded_corners"
-        tools:background="@color/brown"
-
         />
 
 
