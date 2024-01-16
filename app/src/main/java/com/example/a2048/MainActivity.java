@@ -2,45 +2,60 @@ package com.example.a2048;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    int displayWidth, displayHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Getting display width and height
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        displayWidth = displayMetrics.widthPixels;
+        displayHeight = displayMetrics.heightPixels;
+
+        ConstraintLayout mainConstraintLayout = findViewById(R.id.mainConstraintLayout);
+
+
         GridLayout gameGrid = findViewById(R.id.gameGrid);
 
-        int spacing = 15;
+        // Responsive spacing between blocks
+        int spacing = (int) (displayWidth*0.012f);
+
+        int baseSize = (int) (displayWidth*0.05);
+        float scaleFactor = 0.83f;
+
         int val = 2;
 
         for (int x = 0; x < 4; x++) {           // Column (x)
             for (int y = 0; y < 4; y++) {       // Row (y)
                 Context styledContext = new ContextThemeWrapper(this, R.style.GameBlockStyle); // Context with custom style is created
-                GameBlock block = new GameBlock(styledContext); // Creating the gameblock with custom style
+                GameBlock block = new GameBlock(styledContext, x, y, val); // Creating the gameblock with custom style
+                int valDigits = String.valueOf(val).length();
+
+                int textSize = (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
 
 
-                // Setting block properties
-                block.setPosX(x);
-                block.setPosY(y);
-                block.setValue(val);
-                block.setTextSize(40);
+                block.setTextSize(textSize);
 
                 val *= 2;
 
-
                 // Setting GridLayout properties
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                params.width = 200;
-                params.height = 200;
+                params.width = 0;
+                params.height = 0;
                 params.rowSpec = GridLayout.spec(x, 1f);
                 params.columnSpec = GridLayout.spec(y, 1f);
                 params.setMargins(spacing,spacing,spacing,spacing);
@@ -55,5 +70,21 @@ public class MainActivity extends AppCompatActivity {
     public void refreshGrid(GridLayout gameGrid) {
         gameGrid.invalidate();
         gameGrid.requestLayout();
+    }
+
+    public int getDisplayWidth() {
+        return displayWidth;
+    }
+
+    public void setDisplayWidth(int displayWidth) {
+        this.displayWidth = displayWidth;
+    }
+
+    public int getDisplayHeight() {
+        return displayHeight;
+    }
+
+    public void setDisplayHeight(int displayHeight) {
+        this.displayHeight = displayHeight;
     }
 }

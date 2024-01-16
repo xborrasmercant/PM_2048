@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".oldGameBlock">
+    android:layout_height="wrap_content">
 
 
         <GridLayout
@@ -24,7 +23,7 @@
 
             <!-- Game Blocks -->
             <!-- Row 1 -->
-            <include
+            <tools:include
                 android:id="@+id/gameBlock1"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -32,7 +31,7 @@
                 android:layout_row="0"
                 android:layout_column="0" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock2"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -40,7 +39,7 @@
                 android:layout_row="0"
                 android:layout_column="1" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock3"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -48,7 +47,7 @@
                 android:layout_row="0"
                 android:layout_column="2" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock4"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -57,7 +56,7 @@
                 android:layout_column="3" />
 
             <!-- Row 2 -->
-            <include
+            <tools:include
                 android:id="@+id/gameBlock5"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -65,7 +64,7 @@
                 android:layout_row="1"
                 android:layout_column="0" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock6"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -73,7 +72,7 @@
                 android:layout_row="1"
                 android:layout_column="1" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock7"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -81,7 +80,7 @@
                 android:layout_row="1"
                 android:layout_column="2" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock8"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -90,7 +89,7 @@
                 android:layout_column="3" />
 
             <!-- Row 3 -->
-            <include
+            <tools:include
                 android:id="@+id/gameBlock9"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -98,7 +97,7 @@
                 android:layout_row="2"
                 android:layout_column="0" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock10"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -106,7 +105,7 @@
                 android:layout_row="2"
                 android:layout_column="1" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock11"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -114,7 +113,7 @@
                 android:layout_row="2"
                 android:layout_column="2" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock12"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -123,7 +122,7 @@
                 android:layout_column="3" />
 
             <!-- Row 4 -->
-            <include
+            <tools:include
                 android:id="@+id/gameBlock13"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -131,7 +130,7 @@
                 android:layout_row="3"
                 android:layout_column="0" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock14"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -139,7 +138,7 @@
                 android:layout_row="3"
                 android:layout_column="1" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock15"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
@@ -147,7 +146,7 @@
                 android:layout_row="3"
                 android:layout_column="2" />
 
-            <include
+            <tools:include
                 android:id="@+id/gameBlock16"
                 layout="@layout/game_block"
                 android:layout_width="@dimen/blockSize"
