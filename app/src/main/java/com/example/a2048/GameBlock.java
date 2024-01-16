@@ -1,103 +1,119 @@
 package com.example.a2048;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
-public class GameBlock extends Fragment {
+public class GameBlock extends androidx.appcompat.widget.AppCompatTextView {
 
-    private String GameBlockID;
+    private int posX, posY, value;
 
-    public GameBlock (String GameBlockID) {
-        this.GameBlockID = GameBlockID;
+
+    public GameBlock( Context context, int posX, int posY, int value ) {
+        super(context);
+        this.posX = posX;
+        this.posY = posY;
+        this.value = value;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public GameBlock(Context context) {
+        super(context);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_grid, container, false);
+    public void setValue (int value) {
+        this.value = value;
+        this.setText(String.valueOf(value));
 
-        return view;
+        this.setBlockTier(value);
     }
 
-    public void changeBlockValue(String value) {
-        TextView bTextView = findViewById(R.id.blockValue);
-        bTextView.setText(value);
+    public int getValue() {
+        return value;
+    }
 
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+
+    public void setBlockTier(int value) {
         int backgroundColorResId, textColorResID;
         switch (value) {
-            case "":
-                textColorResID = R.color.dark_text;
-                backgroundColorResId = R.color.tier0;
-                break;
-            case "2":
+            case 2:
                 textColorResID = R.color.dark_text;
                 backgroundColorResId = R.color.tier1_1;
                 break;
-            case "4":
+            case 4:
                 textColorResID = R.color.dark_text;
                 backgroundColorResId = R.color.tier1_2;
                 break;
-            case "8":
+            case 8:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier2_1;
                 break;
-            case "16":
+            case 16:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier2_2;
                 break;
-            case "32":
+            case 32:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier3_1;
                 break;
-            case "64":
+            case 64:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier3_2;
                 break;
-            case "128":
+            case 128:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier4_1;
                 break;
-            case "256":
+            case 256:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier4_2;
                 break;
-            case "512":
+            case 512:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier5_1;
                 break;
-            case "1024":
+            case 1024:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier5_2;
                 break;
-            case "2048":
+            case 2048:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier6_1;
                 break;
-            case "4096":
+            case 4096:
                 textColorResID = R.color.light_text;
                 backgroundColorResId = R.color.tier6_2;
                 break;
             default:
-                textColorResID = R.color.light_text;
-                backgroundColorResId = R.color.tier7;
+                textColorResID = R.color.dark_text;
+                backgroundColorResId = R.color.tier0;
                 break;
+
+
         }
 
-        int TextColor = ContextCompat.getColor(this, textColorResID);
-        int BGColor = ContextCompat.getColor(this, backgroundColorResId);
-        bTextView.setTextColor(TextColor);
-        bTextView.setBackgroundColor(BGColor);
+        int TextColor = ContextCompat.getColor(this.getContext(), textColorResID);
+        int BGColor = ContextCompat.getColor(this.getContext(), backgroundColorResId);
+        this.setTextColor(TextColor);
+        this.setBackgroundColor(BGColor);
     }
-
 }
