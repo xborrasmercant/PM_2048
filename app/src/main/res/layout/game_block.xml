@@ -15,7 +15,7 @@
         android:autoSizeMinTextSize="35sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
-        android:background="@color/tier1_1"
+        tools:background="@color/tier1_1"
         android:fontFamily="@font/baloo_bhai_2_bold"
         android:gravity="center"
         tools:text="@string/blockPoints"
@@ -25,6 +25,7 @@
         android:shadowDx="6"
         android:shadowDy="6"
         android:shadowRadius="5"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"

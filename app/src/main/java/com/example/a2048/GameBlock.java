@@ -65,10 +65,6 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView {
     public void setBlockTier(int value) {
         int backgroundColorResId, textColorResID;
 
-        Drawable background = this.getBackground();
-
-        background = background.mutate();
-
         if (value>4096) {
             textColorResID = R.color.light_text;
             backgroundColorResId = R.color.tier7;
@@ -138,7 +134,7 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView {
         this.setTextColor(TextColor);
     }
 
-    public GradientDrawable getDrawableBackground(int BGColor) {
+    private GradientDrawable getDrawableBackground(int BGColor) {
         GradientDrawable newBackground = new GradientDrawable();
         newBackground.setShape(GradientDrawable.RECTANGLE);
         newBackground.setColor(BGColor);

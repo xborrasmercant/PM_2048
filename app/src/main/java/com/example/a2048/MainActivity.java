@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         GridLayout gameGrid = findViewById(R.id.gameGrid);
+
+        gameGrid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
 
         // Responsive spacing between blocks
         int spacing = (int) (displayWidth*0.012f);
@@ -70,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
     public void refreshGrid(GridLayout gameGrid) {
         gameGrid.invalidate();
         gameGrid.requestLayout();
+    }
+
+    private GradientDrawable getDrawableBackground(int BGColor) {
+        GradientDrawable newBackground = new GradientDrawable();
+        newBackground.setShape(GradientDrawable.RECTANGLE);
+        newBackground.setColor(BGColor);
+        newBackground.setCornerRadius(15);
+
+        return newBackground;
     }
 
     public int getDisplayWidth() {
