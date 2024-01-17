@@ -13,8 +13,13 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import com.google.android.material.color.utilities.Score;
+
 public class MainActivity extends AppCompatActivity {
     int displayWidth, displayHeight;
+    Context gameBlockStyledContext = new ContextThemeWrapper(this, R.style.GameBlockStyle); // Context with custom style is created
+    Context scoreBoxStyledContext = new ContextThemeWrapper(this, R.style.ScoreBoxStyle); // Context with custom style is created
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +35,24 @@ public class MainActivity extends AppCompatActivity {
         ConstraintLayout mainConstraintLayout = findViewById(R.id.mainConstraintLayout);
 
 
-        GridLayout gameGrid = findViewById(R.id.gameGrid);
+        ScoreBox currentScore = new ScoreBox(getBaseContext(), 2560, "Score");
+        //currentScore.getScoreLabel().setTextSize(40f);
+        //currentScore.getScoreTextView().setTextSize(40f);
 
+
+        mainConstraintLayout.addView(currentScore.getScoreBoxLayout());
+
+
+
+
+
+
+
+        GridLayout gameGrid = findViewById(R.id.gameGrid);
         gameGrid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
 
         // Responsive spacing between blocks
         int spacing = (int) (displayWidth*0.012f);
-
         int baseSize = (int) (displayWidth*0.05);
         float scaleFactor = 0.83f;
 
@@ -44,12 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         for (int x = 0; x < 4; x++) {           // Column (x)
             for (int y = 0; y < 4; y++) {       // Row (y)
-                Context styledContext = new ContextThemeWrapper(this, R.style.GameBlockStyle); // Context with custom style is created
-                GameBlock block = new GameBlock(styledContext, x, y, val); // Creating the gameblock with custom style
+                GameBlock block = new GameBlock(gameBlockStyledContext, x, y, val); // Creating the gameblock with custom style
                 int valDigits = String.valueOf(val).length();
 
                 int textSize = (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
-
 
                 block.setTextSize(textSize);
 
