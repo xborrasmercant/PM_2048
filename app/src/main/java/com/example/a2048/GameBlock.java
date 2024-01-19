@@ -7,60 +7,33 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowMetrics;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-public class GameBlock extends androidx.appcompat.widget.AppCompatTextView implements GestureDetector.OnGestureListener{
+public class GameBlock extends androidx.appcompat.widget.AppCompatTextView implements View.OnClickListener{
 
     private int posX, posY, value;
-
 
     public GameBlock( Context context, int posX, int posY, int value ) {
         super(context);
         this.posX = posX;
         this.posY = posY;
         this.setValue(value);
+        this.setOnClickListener(this);
     }
 
-    public GameBlock(Context context) {
-        super(context);
-    }
+    // METHODS
 
-    public void setValue (int value) {
-        this.value = value;
+    @Override
+    public void onClick(View v) {
 
-        if (value!=0) {
-            this.setText(String.valueOf(value));
-        }
-        else {
-            this.setText("");
-        }
-
-        this.setBlockTier(value);
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
+        Toast.makeText(getContext(), "Block tapped: Value " + value, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -145,33 +118,39 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView imple
         return newBackground;
     }
 
-    @Override
-    public boolean onDown(@NonNull MotionEvent e) {
-        return false;
+
+    // GETTERS AND SETTERS
+    public void setValue (int value) {
+        this.value = value;
+
+        if (value!=0) {
+            this.setText(String.valueOf(value));
+        }
+        else {
+            this.setText("");
+        }
+
+        this.setBlockTier(value);
     }
 
-    @Override
-    public void onShowPress(@NonNull MotionEvent e) {
-
+    public int getValue() {
+        return value;
     }
 
-    @Override
-    public boolean onSingleTapUp(@NonNull MotionEvent e) {
-        return false;
+    public int getPosX() {
+        return posX;
     }
 
-    @Override
-    public boolean onScroll(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
-        return false;
+    public void setPosX(int posX) {
+        this.posX = posX;
     }
 
-    @Override
-    public void onLongPress(@NonNull MotionEvent e) {
-
+    public int getPosY() {
+        return posY;
     }
 
-    @Override
-    public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
-        return false;
+    public void setPosY(int posY) {
+        this.posY = posY;
     }
+
 }
