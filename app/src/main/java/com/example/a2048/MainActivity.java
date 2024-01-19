@@ -14,7 +14,10 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -22,21 +25,67 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     int displayWidth, displayHeight;
-
     ScoreBox currentScore, bestScore;
     TextView gameLogo;
     GameGrid gameGrid;
+    GestureDetector gestureDetector;
     ConstraintLayout mainConstraintLayout;
     ConstraintLayout.LayoutParams mainCLayoutParams;
     Context gameBlockStyledContext = new ContextThemeWrapper(this, R.style.GameBlockStyle); // Context with custom style is created
+    private static final int MIN_SWIPE_DISTANCE = 120; // Adjust this based on your needs
 
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Ensure that the GestureDetector gets the touch events
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    }
 
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true; // Must return true to get subsequent events.
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                String direction = "NULL";
+
+                float deltaX = e2.getX() - e1.getX();
+                float deltaY = e2.getY() - e1.getY();
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Horizontal swipe
+                    if (Math.abs(deltaX) > MIN_SWIPE_DISTANCE) {
+                        if (deltaX > 0) {
+                            direction = "RIGHT";
+
+                        } else {
+                            direction = "LEFT";
+
+                        }
+                    }
+                } else {
+                    // Vertical swipe
+                    if (Math.abs(deltaY) > MIN_SWIPE_DISTANCE) {
+                        if (deltaY > 0) {
+                            direction = "DOWN";
+                        } else {
+                            direction = "UP";
+                        }
+                    }
+                }
+
+                Log.d("Gesture", "Fling detected: " + direction);
+                updateGameGrid(direction);
+                return true;
+            }
+        });
+
 
         mainConstraintLayout = findViewById(R.id.mainConstraintLayout);
         // Responsive spacing between blocks
@@ -51,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         addComponentsToLayout (textSize);
 
         initGameGrid();
-        updateGameGrid();
     }
+
 
 
     // METHODS
@@ -69,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateGameGrid() {
+    private void updateGameGrid(String direction) {
+        gameGrid.handleSweep(direction);
         gameGrid.valueToRandomGameBlock();
         redrawGridLayout();
 
