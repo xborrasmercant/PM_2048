@@ -50,43 +50,66 @@ public class MainActivity extends AppCompatActivity {
 
         addComponentsToLayout (textSize);
 
-
         initGameGrid();
+        updateGameGrid();
     }
 
 
     // METHODS
 
+    private void redrawGridLayout() {
+        int spacing = (int) (displayWidth*0.012f);
+        gameGrid.removeAllViews();
+
+        for (int x = 0; x < 4; x++) {           // Column (x)
+            for (int y = 0; y < 4; y++) {       // Row (y)
+                GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
+                gameGrid.addView(gameGrid.getGameBlockMatrix()[x][y], params);
+            }
+        }
+    }
+
+    private void updateGameGrid() {
+        gameGrid.valueToRandomGameBlock();
+        redrawGridLayout();
+
+    }
+
     private void initGameGrid() {
         int spacing = (int) (displayWidth*0.012f);
-
 
         for (int x = 0; x < 4; x++) {           // Column (x)
             for (int y = 0; y < 4; y++) {       // Row (y)
                 GameBlock block = new GameBlock(gameBlockStyledContext, x, y, 0); // Creating the gameblock with custom style
 
+                gameGrid.addGameBlockToMatrix(block);
+
                 block.setTextSize(getResponsiveTextSize(0));
                 block.setWidth((int) (displayWidth/4*0.75));
                 block.setHeight((int) (displayWidth/4*0.75));
 
-
                 // Setting GridLayout properties
-                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                params.rowSpec = GridLayout.spec(x, 1f);
-                params.columnSpec = GridLayout.spec(y, 1f);
-                params.setMargins(spacing,spacing,spacing,spacing);
-                gameGrid.setPadding(spacing, spacing, spacing, spacing);
+                GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
 
-                gameGrid.addGameBlockToMatrix(block);
                 gameGrid.addView(block, params);
             }
         }
 
         gameGrid.valueToRandomGameBlock();
 
-
         refreshGrid(gameGrid);
         configureConstraints();
+    }
+
+    public GridLayout.LayoutParams createGridLayoutParams(int x, int y, int spacing) {
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.rowSpec = GridLayout.spec(x);
+        params.columnSpec = GridLayout.spec(y);
+        params.setMargins(spacing,spacing,spacing,spacing);
+        gameGrid.setPadding(spacing, spacing, spacing, spacing);
+
+        return params;
     }
 
     private void addComponentsToLayout(int textSize) {

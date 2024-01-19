@@ -49,6 +49,8 @@ public class GameGrid extends GridLayout {
         gameBlockMatrix[gb.getPosX()][gb.getPosY()] = gb;
     }
 
+
+
     public GameBlock[][] getGameBlockMatrix() {
         return gameBlockMatrix;
     }
