@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -28,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
     ScoreBox currentScore, bestScore;
     TextView gameLogo;
     GameGrid gameGrid;
+    FrameLayout playableArea;
     GestureDetector gestureDetector;
     ConstraintLayout mainConstraintLayout;
     ConstraintLayout.LayoutParams mainCLayoutParams;
-    Context gameBlockStyledContext = new ContextThemeWrapper(this, R.style.GameBlockStyle); // Context with custom style is created
     private static final int MIN_SWIPE_DISTANCE = 120; // Adjust this based on your needs
 
     @Override
@@ -98,13 +99,20 @@ public class MainActivity extends AppCompatActivity {
         int val = 2;
 
         addComponentsToLayout (textSize);
-
-        initGameGrid();
+        configureConstraints();
     }
 
 
 
     // METHODS
+
+    private void updateGameGrid(String direction) {
+        gameGrid.valueToRandomGameBlock();
+        gameGrid.handleSweep(direction);
+        //redrawGridLayout();
+
+    }
+
 
     private void redrawGridLayout() {
         int spacing = (int) (displayWidth*0.012f);
@@ -118,30 +126,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateGameGrid(String direction) {
-        gameGrid.handleSweep(direction);
-        gameGrid.valueToRandomGameBlock();
-        redrawGridLayout();
 
-    }
-
-    private void initGameGrid() {
+    private void formatGameGrid() {
         int spacing = (int) (displayWidth*0.012f);
 
         for (int x = 0; x < 4; x++) {           // Column (x)
             for (int y = 0; y < 4; y++) {       // Row (y)
-                GameBlock block = new GameBlock(gameBlockStyledContext, x, y, 0); // Creating the gameblock with custom style
-
-                gameGrid.addGameBlockToMatrix(block);
+                GameBlock block = gameGrid.getGameBlockMatrix()[x][y];
 
                 block.setTextSize(getResponsiveTextSize(0));
                 block.setWidth((int) (displayWidth/4*0.75));
                 block.setHeight((int) (displayWidth/4*0.75));
-
-                // Setting GridLayout properties
-                GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
-
-                gameGrid.addView(block, params);
             }
         }
 
@@ -188,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
         gameGrid.setId(View.generateViewId());
         gameGrid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
         mainConstraintLayout.addView(gameGrid);
+
+        redrawGridLayout();
+        formatGameGrid();
     }
 
     private void configureConstraints() {

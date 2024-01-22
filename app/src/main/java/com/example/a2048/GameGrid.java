@@ -1,130 +1,156 @@
-package com.example.a2048;
+    package com.example.a2048;
 
-import android.content.Context;
-import android.widget.GridLayout;
+    import android.content.Context;
+    import android.util.Log;
+    import android.widget.GridLayout;
 
-public class GameGrid extends GridLayout {
-    private int gridWidth, gridHeight;
-    private final GameBlock[][] gameBlockMatrix;
+    import androidx.appcompat.view.ContextThemeWrapper;
 
-    public GameGrid(Context context, int gridWidth, int gridHeight) {
-        super(context);
-        this.gridWidth = gridWidth;
-        this.gridHeight = gridHeight;
-        this.gameBlockMatrix = new GameBlock[gridHeight][gridWidth];
-    }
+    public class GameGrid extends GridLayout {
+        private int gridWidth, gridHeight;
+        private final GameBlock[][] gameBlockMatrix;
+        Context gameBlockStyledContext = new ContextThemeWrapper(this.getContext(), R.style.GameBlockStyle); // Context with custom style is created
 
-    public int[] valueToRandomGameBlock() {
-        int randomWidth = (int) (Math.random()*gridWidth);
-        int randomHeight = (int) (Math.random()*gridHeight);
 
-        // If random position value isn't empty (0) regenerate a random position.
-        while (gameBlockMatrix[randomWidth][randomHeight].getValue() != 0) {
-            randomWidth = (int) (Math.random()*gridWidth);
-            randomHeight = (int) (Math.random()*gridHeight);
+        public GameGrid(Context context, int gridWidth, int gridHeight) {
+            super(context);
+            this.gridWidth = gridWidth;
+            this.gridHeight = gridHeight;
+            this.gameBlockMatrix = new GameBlock[gridHeight][gridWidth];
+            this.initGrid();
+            this.valueToRandomGameBlock();
         }
 
-        gameBlockMatrix[randomWidth][randomHeight].setValue(2);
+        public int[] valueToRandomGameBlock() {
+            int randomWidth = (int) (Math.random()*gridWidth);
+            int randomHeight = (int) (Math.random()*gridHeight);
 
-        return new int[] {randomWidth, randomHeight};
-    }
+            // If random position value isn't empty (0) regenerate a random position.
+            while (gameBlockMatrix[randomWidth][randomHeight].getValue() != 0) {
+                randomWidth = (int) (Math.random()*gridWidth);
+                randomHeight = (int) (Math.random()*gridHeight);
+            }
+
+            gameBlockMatrix[randomWidth][randomHeight].setValue(2);
+
+            return new int[] {randomWidth, randomHeight};
+        }
 
 
 
-    public void handleSweep(String direction) {
-        boolean[][] merged = new boolean[gridHeight][gridWidth]; // Keep track of merges
+        public void handleSweep(String direction) {
+            boolean[][] merged = new boolean[gridHeight][gridWidth]; // Keep track of merges
 
-        if (direction.equals("LEFT") || direction.equals("RIGHT")) {
-            // Move and merge from left-to-right or top-to-bottom
-            for (int row = 0; row < gridHeight; row++) {
-                for (int col = 0; col < gridWidth; col++) {
-                    moveAndMergeTiles(row, col, direction, merged);
+            if (direction.equals("LEFT") || direction.equals("UP")) {
+                // Move and merge from left-to-right or top-to-bottom
+                for (int row = 0; row < gridHeight; row++) {
+                    for (int col = 0; col < gridWidth; col++) {
+                        Log.d("Direction", "Direction: " + direction);
+                        moveAndMergeTiles(row, col, direction, merged);
+                    }
+                }
+            } else if (direction.equals("RIGHT") || direction.equals("DOWN")) {
+
+                for (int row = gridHeight - 1; row >= 0; row--) {
+                    for (int col = gridWidth - 1; col >= 0; col--) {
+                        Log.d("Direction", "Direction: " + direction);
+                        moveAndMergeTiles(row, col, direction, merged);
+                    }
                 }
             }
-        } else {
-            // Move and merge from right-to-left or bottom-to-top
-            for (int row = gridHeight - 1; row >= 0; row--) {
-                for (int col = gridWidth - 1; col >= 0; col--) {
-                    moveAndMergeTiles(row, col, direction, merged);
-                }
-            }
-        }
-    }
-
-    private void moveAndMergeTiles(int row, int col, String direction, boolean[][] merged) {
-        if (gameBlockMatrix[row][col].getValue() == 0) {
-            return; // Skip empty cells
         }
 
-        int nextRow = row, nextCol = col;
-        while (nextCellAvailable(direction, nextRow, nextCol)) {
-            // Move to the next cell in the direction
-            if (direction.equals("UP")) nextRow--;
-            else if (direction.equals("DOWN")) nextRow++;
-            else if (direction.equals("LEFT")) nextCol--;
-            else if (direction.equals("RIGHT")) nextCol++;
-
-            if (nextRow < 0 || nextRow >= gridHeight || nextCol < 0 || nextCol >= gridWidth) {
-                break; // Break if out of grid bounds
+        private void moveAndMergeTiles(int row, int col, String direction, boolean[][] merged) {
+            if (gameBlockMatrix[row][col].getValue() == 0 || merged[row][col]) {
+                return; // Skip empty cells
             }
 
-            if (gameBlockMatrix[nextRow][nextCol].getValue() != 0) {
-                if (gameBlockMatrix[nextRow][nextCol] == gameBlockMatrix[row][col] && !merged[nextRow][nextCol]) {
-                    // Merge tiles
+            int currentRow = row, currentCol = col;
+            int nextRow = row, nextCol = col;
+
+            switch (direction) {
+                case "UP":
+                    nextRow--;
+                    break;
+                case "DOWN":
+                    nextRow++;
+                    break;
+                case "LEFT":
+                    nextCol--;
+                    break;
+                case "RIGHT":
+                    nextCol++;
+                    break;
+            }
+
+            // While in bounds
+            while (inBounds(nextRow, nextCol, gridHeight, gridWidth)) {
+                if (this.gameBlockMatrix[nextRow][nextCol].getValue() == 0) {
+                    // Move the tile
+                    this.gameBlockMatrix[nextRow][nextCol] = this.gameBlockMatrix[currentRow][currentCol];
+                    this.gameBlockMatrix[currentRow][currentCol].setValue(0);
+                    currentRow = nextRow;
+                    currentCol = nextCol;
+                } else if (this.gameBlockMatrix[nextRow][nextCol] == this.gameBlockMatrix[currentRow][currentCol] && !merged[nextRow][nextCol]) {
+                    // Merge the tiles
                     gameBlockMatrix[nextRow][nextCol].setValue(gameBlockMatrix[nextRow][nextCol].getValue() * 2);
                     gameBlockMatrix[row][col].setValue(0);
                     merged[nextRow][nextCol] = true;
+                    break;
+                } else {
+                    break; // Stop if we hit a non-matching tile
                 }
-                break; // Stop moving if we hit a non-matching tile
-            } else {
-                // Move tile
-                gameBlockMatrix[nextRow][nextCol] = gameBlockMatrix[row][col];
-                gameBlockMatrix[row][col].setValue(0);
+
+                if (direction.equals("UP")) nextRow--;
+                else if (direction.equals("DOWN")) nextRow++;
+                else if (direction.equals("LEFT")) nextCol--;
+                else if (direction.equals("RIGHT")) nextCol++;
+
             }
         }
-    }
 
-
-    public boolean nextCellAvailable (String direction, int row, int col) {
-
-        switch (direction){
-            case "UP":
-                if (row > 0 && gameBlockMatrix[row-1][col].getValue() == 0) {return true;}
-                break;
-            case "DOWN":
-                if (row < gameBlockMatrix.length-1 && gameBlockMatrix[row+1][col].getValue() == 0) {return true;}
-                break;
-            case "LEFT":
-                if (col > 0 && gameBlockMatrix[row][col-1].getValue() == 0) {return true;}
-                break;
-            case "RIGHT":
-                if (col < gameBlockMatrix[row].length-1 && gameBlockMatrix[row][col+1].getValue() == 0) {return true;}
-                break;
+        public boolean inBounds(int nextRow, int nextCol, int height, int width) {
+            if (nextRow >= 0 && nextRow < height && nextCol >= 0 && nextCol < width){
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        return false;
-    }
 
-    public void addGameBlockToMatrix(GameBlock gb) {
-        gameBlockMatrix[gb.getPosX()][gb.getPosY()] = gb;
-    }
 
-    public int getGridWidth() {
-        return gridWidth;
-    }
+        public void addGameBlockToMatrix(GameBlock gb) {
+            gameBlockMatrix[gb.getPosX()][gb.getPosY()] = gb;
+        }
 
-    public void setGridWidth(int gridWidth) {
-        this.gridWidth = gridWidth;
-    }
+        public void initGrid() {
 
-    public int getGridHeight() {
-        return gridHeight;
-    }
+            for (int x = 0; x < gridWidth; x++) {
+                for (int y = 0; y < gridHeight; y++) {
+                    GameBlock newGameBlock = new GameBlock(gameBlockStyledContext, x, y, 0);
 
-    public void setGridHeight(int gridHeight) {
-        this.gridHeight = gridHeight;
-    }
+                    this.addGameBlockToMatrix(newGameBlock);
+                }
+            }
+        }
 
-    public GameBlock[][] getGameBlockMatrix() {
-        return gameBlockMatrix;
+        public int getGridWidth() {
+            return gridWidth;
+        }
+
+        public void setGridWidth(int gridWidth) {
+            this.gridWidth = gridWidth;
+        }
+
+        public int getGridHeight() {
+            return gridHeight;
+        }
+
+        public void setGridHeight(int gridHeight) {
+            this.gridHeight = gridHeight;
+        }
+
+        public GameBlock[][] getGameBlockMatrix() {
+            return gameBlockMatrix;
+        }
     }
-}
