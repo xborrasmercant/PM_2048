@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-public class GameBlock extends androidx.appcompat.widget.AppCompatTextView implements View.OnClickListener{
+public class GameBlock extends androidx.appcompat.widget.AppCompatTextView{
 
     private int posX, posY, value;
 
@@ -24,18 +24,9 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView imple
         super(context);
         this.posX = posX;
         this.posY = posY;
-        this.setValue(value);
-        this.setOnClickListener(this);
-    }
+        this.setValue(value);}
 
     // METHODS
-
-    @Override
-    public void onClick(View v) {
-
-        Toast.makeText(getContext(), "Block tapped: Value " + value, Toast.LENGTH_SHORT).show();
-    }
-
 
     public void setBlockTier(int value) {
         int backgroundColorResId, textColorResID;

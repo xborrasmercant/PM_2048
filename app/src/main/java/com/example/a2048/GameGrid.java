@@ -21,21 +21,30 @@
             this.valueToRandomGameBlock();
         }
 
-        public int[] valueToRandomGameBlock() {
-            int randomWidth = (int) (Math.random()*gridWidth);
-            int randomHeight = (int) (Math.random()*gridHeight);
+        public void valueToRandomGameBlock() {
+            int counter = 0;
+            int randomWidth = (int) (Math.random() * gridWidth);
+            int randomHeight = (int) (Math.random() * gridHeight);
+            boolean gameOver = false;
 
             // If random position value isn't empty (0) regenerate a random position.
-            while (gameBlockMatrix[randomWidth][randomHeight].getValue() != 0) {
-                randomWidth = (int) (Math.random()*gridWidth);
-                randomHeight = (int) (Math.random()*gridHeight);
+            while (gameBlockMatrix[randomWidth][randomHeight].getValue() != 0 && !gameOver) {
+                if (counter > gridWidth + gridHeight) {
+                    gameOver = true;
+                }
+
+                randomWidth = (int) (Math.random() * gridWidth);
+                randomHeight = (int) (Math.random() * gridHeight);
+
+                counter++;
             }
 
-            gameBlockMatrix[randomWidth][randomHeight].setValue(2);
-
-            return new int[] {randomWidth, randomHeight};
+            if (gameOver) {
+                // Player loses
+            } else {
+                gameBlockMatrix[randomWidth][randomHeight].setValue(2); // Add new gameBlock
+            }
         }
-
 
 
         public void handleSweep(String direction) {
@@ -61,6 +70,8 @@
         }
 
         private void moveAndMergeTiles(int row, int col, String direction, boolean[][] merged) {
+            boolean sweepHandled = false;
+
             if (gameBlockMatrix[row][col].getValue() == 0 || merged[row][col]) {
                 return; // Skip empty cells
             }
@@ -84,21 +95,21 @@
             }
 
             // While in bounds
-            while (inBounds(nextRow, nextCol, gridHeight, gridWidth)) {
+            while (inBounds(nextRow, nextCol, gridHeight, gridWidth) && !sweepHandled) {
                 if (this.gameBlockMatrix[nextRow][nextCol].getValue() == 0) {
                     // Move the tile
-                    this.gameBlockMatrix[nextRow][nextCol] = this.gameBlockMatrix[currentRow][currentCol];
+                    this.gameBlockMatrix[nextRow][nextCol].setValue(gameBlockMatrix[currentRow][currentCol].getValue());
                     this.gameBlockMatrix[currentRow][currentCol].setValue(0);
                     currentRow = nextRow;
                     currentCol = nextCol;
-                } else if (this.gameBlockMatrix[nextRow][nextCol] == this.gameBlockMatrix[currentRow][currentCol] && !merged[nextRow][nextCol]) {
+                } else if (gameBlockMatrix[currentRow][currentCol].getValue() == gameBlockMatrix[nextRow][nextCol].getValue() && !merged[nextRow][nextCol]) {
                     // Merge the tiles
                     gameBlockMatrix[nextRow][nextCol].setValue(gameBlockMatrix[nextRow][nextCol].getValue() * 2);
-                    gameBlockMatrix[row][col].setValue(0);
+                    gameBlockMatrix[currentRow][currentCol].setValue(0);
                     merged[nextRow][nextCol] = true;
-                    break;
+                    sweepHandled = true;
                 } else {
-                    break; // Stop if we hit a non-matching tile
+                    sweepHandled = true; // Stop if we hit a non-matching tile
                 }
 
                 if (direction.equals("UP")) nextRow--;

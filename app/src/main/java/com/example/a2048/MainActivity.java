@@ -48,10 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return true; // Must return true to get subsequent events.
-            }
+
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -98,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         int textSize = (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
         int val = 2;
 
-        addComponentsToLayout (textSize);
+        addComponentsToLayout();
         configureConstraints();
     }
 
@@ -107,12 +104,11 @@ public class MainActivity extends AppCompatActivity {
     // METHODS
 
     private void updateGameGrid(String direction) {
-        gameGrid.valueToRandomGameBlock();
         gameGrid.handleSweep(direction);
+        gameGrid.valueToRandomGameBlock();
         //redrawGridLayout();
 
     }
-
 
     private void redrawGridLayout() {
         int spacing = (int) (displayWidth*0.012f);
@@ -126,8 +122,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private void formatGameGrid() {
+    private void initGameGridLayout() {
         int spacing = (int) (displayWidth*0.012f);
 
         for (int x = 0; x < 4; x++) {           // Column (x)
@@ -137,29 +132,17 @@ public class MainActivity extends AppCompatActivity {
                 block.setTextSize(getResponsiveTextSize(0));
                 block.setWidth((int) (displayWidth/4*0.75));
                 block.setHeight((int) (displayWidth/4*0.75));
+
+                GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
+                gameGrid.addView(gameGrid.getGameBlockMatrix()[x][y], params);
             }
         }
-
-        gameGrid.valueToRandomGameBlock();
-
-        refreshGrid(gameGrid);
-        configureConstraints();
     }
 
-    public GridLayout.LayoutParams createGridLayoutParams(int x, int y, int spacing) {
+    private void addComponentsToLayout() {
 
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.rowSpec = GridLayout.spec(x);
-        params.columnSpec = GridLayout.spec(y);
-        params.setMargins(spacing,spacing,spacing,spacing);
-        gameGrid.setPadding(spacing, spacing, spacing, spacing);
-
-        return params;
-    }
-
-    private void addComponentsToLayout(int textSize) {
         gameLogo = new TextView(getBaseContext());
-        gameLogo.setTextSize(textSize*1.8f);
+        gameLogo.setTextSize(getResponsiveTextSize(2048)*1.8f);
         gameLogo.setText("2048");
         gameLogo.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
         gameLogo.setGravity(Gravity.CENTER);
@@ -184,8 +167,7 @@ public class MainActivity extends AppCompatActivity {
         gameGrid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
         mainConstraintLayout.addView(gameGrid);
 
-        redrawGridLayout();
-        formatGameGrid();
+        initGameGridLayout();
     }
 
     private void configureConstraints() {
@@ -264,6 +246,17 @@ public class MainActivity extends AppCompatActivity {
         int textSize = (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
 
         return textSize;
+    }
+
+    public GridLayout.LayoutParams createGridLayoutParams(int x, int y, int spacing) {
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.rowSpec = GridLayout.spec(x);
+        params.columnSpec = GridLayout.spec(y);
+        params.setMargins(spacing,spacing,spacing,spacing);
+        gameGrid.setPadding(spacing, spacing, spacing, spacing);
+
+        return params;
     }
 
     // GETTERS AND SETTERS
