@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
             for (int y = 0; y < 4; y++) {       // Row (y)
                 GameBlock block = gameGrid.getGameBlockMatrix()[x][y];
 
-                block.setValue(256);
                 block.getTextView().setTextSize(getResponsiveTextSize(block.getValue()));
 
                 GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
