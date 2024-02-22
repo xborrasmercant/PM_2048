@@ -1,16 +1,12 @@
 package com.example.a2048;
 
-import static java.security.AccessController.getContext;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -24,14 +20,14 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
     int displayWidth, displayHeight;
     ScoreBox currentScore, bestScore;
     TextView gameLogo;
     GameGrid gameGrid;
     FrameLayout playableArea;
     GestureDetector gestureDetector;
-    ConstraintLayout mainConstraintLayout;
+    ConstraintLayout gameConstraintLayout;
     ConstraintLayout.LayoutParams mainCLayoutParams;
     private static final int MIN_SWIPE_DISTANCE = 120; // Adjust this based on your needs
 
@@ -45,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
 
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
 
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mainConstraintLayout = findViewById(R.id.mainConstraintLayout);
+        gameConstraintLayout = findViewById(R.id.gameConstraintLayout);
         // Responsive spacing between blocks
         saveDisplaySize();
         int spacing = (int) (displayWidth*0.012f);
@@ -157,20 +153,20 @@ public class MainActivity extends AppCompatActivity {
         gameLogo.setHeight((int) (displayWidth/3*1.15));
         gameLogo.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.tier4_2)));
         gameLogo.setId(View.generateViewId());
-        mainConstraintLayout.addView(gameLogo);
+        gameConstraintLayout.addView(gameLogo);
 
         currentScore = new ScoreBox(getBaseContext(), 2560, "Score");
         currentScore.setId(View.generateViewId());
-        mainConstraintLayout.addView(currentScore);
+        gameConstraintLayout.addView(currentScore);
 
         bestScore = new ScoreBox(getBaseContext(), 1111111111, "Best");
         bestScore.setId(View.generateViewId());
-        mainConstraintLayout.addView(bestScore);
+        gameConstraintLayout.addView(bestScore);
 
         gameGrid = new GameGrid(getBaseContext(), 4, 4);
         gameGrid.setId(View.generateViewId());
         gameGrid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
-        mainConstraintLayout.addView(gameGrid);
+        gameConstraintLayout.addView(gameGrid);
 
         initGameGridLayout();
     }
@@ -185,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         int parentID = ConstraintSet.PARENT_ID;
         int gameLogoID = gameLogo.getId();
 
-        cs.clone(mainConstraintLayout); // Clone the constraints of mainConstraintLayout into ConstraintSet
+        cs.clone(gameConstraintLayout); // Clone the constraints of gameConstraintLayout into ConstraintSet
 
         cs.setVerticalBias(gameLogoID, 0.5f);
         cs.setVerticalBias(bestScoreID, 0.9f);
@@ -213,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         cs.connect(gameGridID, ConstraintSet.END, parentID, ConstraintSet.END, spacing);
         cs.connect(gameGridID, ConstraintSet.BOTTOM, parentID, ConstraintSet.BOTTOM, spacing*8);
 
-        cs.applyTo(mainConstraintLayout);
+        cs.applyTo(gameConstraintLayout);
     }
 
     public void setScoreLayoutParams() {
