@@ -1,22 +1,23 @@
     package com.example.a2048;
 
     import android.content.Context;
+    import android.util.DisplayMetrics;
     import android.util.Log;
     import android.widget.GridLayout;
 
     import androidx.appcompat.view.ContextThemeWrapper;
 
-    public class GameGrid extends GridLayout {
+    public class Grid extends GridLayout {
         private int gridWidth, gridHeight;
-        private final GameBlock[][] gameBlockMatrix;
+        private final Block[][] gameBlockMatrix;
         Context gameBlockStyledContext = new ContextThemeWrapper(this.getContext(), R.style.GameBlockStyle); // Context with custom style is created
 
 
-        public GameGrid(Context context, int gridWidth, int gridHeight) {
+        public Grid(Context context, int gridWidth, int gridHeight) {
             super(context);
             this.gridWidth = gridWidth;
             this.gridHeight = gridHeight;
-            this.gameBlockMatrix = new GameBlock[gridHeight][gridWidth];
+            this.gameBlockMatrix = new Block[gridHeight][gridWidth];
             this.initGrid();
             this.valueToRandomGameBlock();
         }
@@ -130,7 +131,7 @@
         }
 
 
-        public void addGameBlockToMatrix(GameBlock gb) {
+        public void addGameBlockToMatrix(Block gb) {
             gameBlockMatrix[gb.getPosX()][gb.getPosY()] = gb;
         }
 
@@ -138,11 +139,27 @@
 
             for (int x = 0; x < gridWidth; x++) {
                 for (int y = 0; y < gridHeight; y++) {
-                    GameBlock newGameBlock = new GameBlock(gameBlockStyledContext, x, y, 0);
+                    Block newGameBlock = new Block(gameBlockStyledContext, x, y, 0);
 
                     this.addGameBlockToMatrix(newGameBlock);
                 }
             }
+        }
+
+        public void resetGrid(){
+            int spacing = (int) (getDisplayWidth()*0.012f);
+            for (Block[] row : this.getGameBlockMatrix()) {
+                for (Block b : row) {
+                    b.setValue(0);
+                }
+            }
+
+            valueToRandomGameBlock();
+        }
+
+        public int getDisplayWidth(){
+            DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+            return displayMetrics.widthPixels;
         }
 
         public int getGridWidth() {
@@ -161,7 +178,7 @@
             this.gridHeight = gridHeight;
         }
 
-        public GameBlock[][] getGameBlockMatrix() {
+        public Block[][] getGameBlockMatrix() {
             return gameBlockMatrix;
         }
     }

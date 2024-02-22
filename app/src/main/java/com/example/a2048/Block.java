@@ -1,30 +1,20 @@
 package com.example.a2048;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowMetrics;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-public class GameBlock extends FrameLayout {
+public class Block extends FrameLayout {
 
     private int displayWidth, displayHeight;
     private int posX, posY, value;
     private final TextView textView;
 
-    public GameBlock( Context context, int posX, int posY, int value) {
+    public Block(Context context, int posX, int posY, int value) {
         super(context);
         setDisplaySizes();
 
