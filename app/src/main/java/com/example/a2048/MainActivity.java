@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     public void resizeGameBlockText() {
         for (GameBlock[] row : gameGrid.getGameBlockMatrix()) {
             for (GameBlock gb : row) {
-                gb.setTextSize(getResponsiveTextSize(gb.getValue()));
+                gb.getTextView().setTextSize(getResponsiveTextSize(gb.getValue()));
             }
         }
     }
@@ -136,9 +136,8 @@ public class MainActivity extends AppCompatActivity {
             for (int y = 0; y < 4; y++) {       // Row (y)
                 GameBlock block = gameGrid.getGameBlockMatrix()[x][y];
 
-                block.setTextSize(getResponsiveTextSize(block.getValue()));
-                block.setWidth((int) (displayWidth/4*0.75));
-                block.setHeight((int) (displayWidth/4*0.75));
+                block.setValue(256);
+                block.getTextView().setTextSize(getResponsiveTextSize(block.getValue()));
 
                 GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
                 gameGrid.addView(gameGrid.getGameBlockMatrix()[x][y], params);
