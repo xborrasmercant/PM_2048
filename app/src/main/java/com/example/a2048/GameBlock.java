@@ -5,10 +5,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowMetrics;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,17 +18,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-public class GameBlock extends androidx.appcompat.widget.AppCompatTextView{
+public class GameBlock extends FrameLayout {
 
+    private int displayWidth, displayHeight;
     private int posX, posY, value;
+    private final TextView textView;
 
-    public GameBlock( Context context, int posX, int posY, int value ) {
+    public GameBlock( Context context, int posX, int posY, int value) {
         super(context);
+        setDisplaySizes();
+
         this.posX = posX;
         this.posY = posY;
-        this.setValue(value);}
+        this.textView = new TextView(context);
+        this.setValue(value);
+        addComponentsToLayout();
+    }
 
     // METHODS
+    public void addComponentsToLayout() {
+        this.textView.setLayoutParams(createFrameLayoutParams());
+        this.addView(textView);
+    }
 
     public void setBlockTier(int value) {
         int backgroundColorResId, textColorResID;
@@ -97,7 +110,8 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView{
 
 
         this.setBackground(getDrawableBackground(BGColor));
-        this.setTextColor(TextColor);
+        textView.setBackground(getDrawableBackground(BGColor));
+        textView.setTextColor(TextColor);
     }
 
     private GradientDrawable getDrawableBackground(int BGColor) {
@@ -109,16 +123,30 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView{
         return newBackground;
     }
 
+    public FrameLayout.LayoutParams createFrameLayoutParams() {
+        int cellMargin = (int) (displayWidth*1.2/100);
+        int cellSize = (int) ((displayWidth - cellMargin * 16) / 4.4);
+
+        FrameLayout.LayoutParams params = new LayoutParams(cellSize, cellSize);
+        params.setMargins(cellMargin, cellMargin, cellMargin, cellMargin);
+        return params;
+    }
+
+    public void setDisplaySizes() {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        displayWidth = displayMetrics.widthPixels;
+        displayHeight = displayMetrics.heightPixels;
+    }
 
     // GETTERS AND SETTERS
     public void setValue (int value) {
         this.value = value;
 
         if (value!=0) {
-            this.setText(String.valueOf(value));
+            textView.setText(String.valueOf(value));
         }
         else {
-            this.setText("");
+            textView.setText("");
         }
 
         this.setBlockTier(value);
@@ -144,4 +172,7 @@ public class GameBlock extends androidx.appcompat.widget.AppCompatTextView{
         this.posY = posY;
     }
 
+    public TextView getTextView() {
+        return textView;
+    }
 }

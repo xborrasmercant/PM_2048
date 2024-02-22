@@ -100,14 +100,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     // METHODS
-
     private void updateGameGrid(String direction) {
         gameGrid.handleSweep(direction);
         gameGrid.valueToRandomGameBlock();
+        resizeGameBlockText();
         //redrawGridLayout();
 
+    }
+
+    public void resizeGameBlockText() {
+        for (GameBlock[] row : gameGrid.getGameBlockMatrix()) {
+            for (GameBlock gb : row) {
+                gb.getTextView().setTextSize(getResponsiveTextSize(gb.getValue()));
+            }
+        }
     }
 
     private void redrawGridLayout() {
@@ -129,9 +136,8 @@ public class MainActivity extends AppCompatActivity {
             for (int y = 0; y < 4; y++) {       // Row (y)
                 GameBlock block = gameGrid.getGameBlockMatrix()[x][y];
 
-                block.setTextSize(getResponsiveTextSize(0));
-                block.setWidth((int) (displayWidth/4*0.75));
-                block.setHeight((int) (displayWidth/4*0.75));
+                block.setValue(256);
+                block.getTextView().setTextSize(getResponsiveTextSize(block.getValue()));
 
                 GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
                 gameGrid.addView(gameGrid.getGameBlockMatrix()[x][y], params);
@@ -243,9 +249,8 @@ public class MainActivity extends AppCompatActivity {
         float scaleFactor = 0.83f;
 
         int valDigits = String.valueOf(val).length();
-        int textSize = (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
 
-        return textSize;
+        return (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
     }
 
     public GridLayout.LayoutParams createGridLayoutParams(int x, int y, int spacing) {
