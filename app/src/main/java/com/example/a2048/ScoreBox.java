@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,33 +20,55 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-public class ScoreBox extends LinearLayout {
+public class ScoreBox extends ConstraintLayout {
     private int scoreValue;
-    private TextView labelView, valueView;
+    private TextView scoreLabel, scoreTextView;
     private ConstraintLayout.LayoutParams scoreLayoutParams;
 
     public ScoreBox(@NonNull Context context, int scoreValue, String labelString) {
         super(context);
-        this.setOrientation(LinearLayout.VERTICAL);
+
         this.scoreValue = scoreValue;
 
         // Score TextView Config
-        this.valueView = new TextView(context);
-        this.valueView.setId(View.generateViewId());
-        this.valueView.setText(String.valueOf(scoreValue));
-        setBoxParams(valueView, 8, 16);
+        this.scoreTextView = new TextView(context);
+        this.scoreTextView.setId(View.generateViewId());
+        this.scoreTextView.setText(String.valueOf(scoreValue));
 
         // Score Label Config
-        this.labelView = new TextView(context);
-        this.labelView.setId(View.generateViewId());
-        this.labelView.setText(labelString);
-        setBoxParams(labelView, 16, 8);
-
-
-        this.addView(labelView);
-        this.addView(valueView);
+        this.scoreLabel = new TextView(context);
+        this.scoreLabel.setId(View.generateViewId());
+        this.scoreLabel.setText(labelString);
 
         giveStyleToComponents();
+        setScoreLayoutParams();
+
+        this.addView(scoreLabel);
+        this.addView(scoreTextView);
+
+        configureConstraints();
+    }
+
+    private void configureConstraints() {
+        // ConstraintSet Configuration
+        ConstraintSet cs = new ConstraintSet();
+        int spacing = 0;
+
+        cs.clone(this); // Clone the constraints of scoreBoxLayout into ConstraintSet
+
+        cs.connect(scoreTextView.getId(), ConstraintSet.TOP, scoreLabel.getId(), ConstraintSet.BOTTOM, 0);
+
+        cs.connect(scoreLabel.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, spacing);
+        cs.connect(scoreLabel.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, spacing);
+        cs.connect(scoreLabel.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, spacing);
+
+        cs.connect(scoreTextView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, spacing);
+        cs.connect(scoreTextView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, spacing);
+        cs.connect(scoreTextView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, spacing);
+
+        cs.applyTo(this);
+
+
     }
 
     private GradientDrawable getDrawableBackground(int BGColor) {
@@ -63,18 +84,18 @@ public class ScoreBox extends LinearLayout {
         this.setBackground(getDrawableBackground(ContextCompat.getColor(this.getContext(), R.color.dark_brown)));
 
         // Edit Style
-        labelView.setTextColor(ContextCompat.getColor(this.getContext(), R.color.beige));
-        labelView.setGravity(Gravity.CENTER);
-        labelView.setShadowLayer(5, 6, 6, ContextCompat.getColor(this.getContext(), R.color.shadowColor));
-        labelView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.baloo_bhai_2_bold));
-        labelView.setTextSize(25f);
+        scoreLabel.setTextColor(ContextCompat.getColor(this.getContext(), R.color.beige));
+        scoreLabel.setGravity(Gravity.CENTER);
+        scoreLabel.setShadowLayer(5, 6, 6, ContextCompat.getColor(this.getContext(), R.color.shadowColor));
+        scoreLabel.setTypeface(ResourcesCompat.getFont(getContext(), R.font.baloo_bhai_2_bold));
+        scoreLabel.setTextSize(25f);
 
 
-        valueView.setTextColor(ContextCompat.getColor(this.getContext(), R.color.light_beige));
-        valueView.setGravity(Gravity.CENTER);
-        valueView.setShadowLayer(5, 6, 6, ContextCompat.getColor(this.getContext(), R.color.shadowColor));
-        valueView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.baloo_bhai_2_bold));
-        valueView.setTextSize(25f);
+        scoreTextView.setTextColor(ContextCompat.getColor(this.getContext(), R.color.light_beige));
+        scoreTextView.setGravity(Gravity.CENTER);
+        scoreTextView.setShadowLayer(5, 6, 6, ContextCompat.getColor(this.getContext(), R.color.shadowColor));
+        scoreTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.baloo_bhai_2_bold));
+        scoreTextView.setTextSize(25f);
 
     }
 
@@ -90,13 +111,10 @@ public class ScoreBox extends LinearLayout {
         this.setLayoutParams(scoreLayoutParams);
     }
 
-
-    private void setBoxParams(View view, int topMargin, int botMargin) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f);
-        params.setMargins(0, topMargin, 0, botMargin);
-
-        view.setLayoutParams(params);
+    public LayoutParams getScoreLayoutParams() {
+        return scoreLayoutParams;
     }
+
 
     public int getScoreValue() {
         return scoreValue;
@@ -106,28 +124,19 @@ public class ScoreBox extends LinearLayout {
         this.scoreValue = scoreValue;
     }
 
-    public TextView getLabelView() {
-        return labelView;
+    public TextView getScoreLabel() {
+        return scoreLabel;
     }
 
-    public void setLabelView(TextView labelView) {
-        this.labelView = labelView;
+    public void setScoreLabel(TextView scoreLabel) {
+        this.scoreLabel = scoreLabel;
     }
 
-    public TextView getValueView() {
-        return valueView;
+    public TextView getScoreTextView() {
+        return scoreTextView;
     }
 
-    public void setValueView(TextView valueView) {
-        this.valueView = valueView;
-    }
-
-    public ConstraintLayout.LayoutParams getScoreLayoutParams() {
-        return scoreLayoutParams;
-    }
-
-    public void setScoreLayoutParams(ConstraintLayout.LayoutParams scoreLayoutParams) {
-        this.scoreLayoutParams = scoreLayoutParams;
+    public void setScoreTextView(TextView scoreTextView) {
+        this.scoreTextView = scoreTextView;
     }
 }
-

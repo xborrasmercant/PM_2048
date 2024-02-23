@@ -35,7 +35,7 @@ public class GameActivity extends AppCompatActivity {
     GestureDetector gestureDetector;
     ConstraintLayout gameLayout;
     ConstraintLayout.LayoutParams mainCLayoutParams;
-    LinearLayout footer, scoreBoxesContainer;
+    LinearLayout footer;
     Button undoBtn, resetBtn;
     Typeface mainTypeface;
 
@@ -152,11 +152,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void addComponentsToLayout() {
+        int spacing = 24;
         mainTypeface = ResourcesCompat.getFont(this, R.font.baloo_bhai_2_bold);
 
-
         gameLogo = new TextView(getBaseContext());
-        gameLogo.setId(View.generateViewId());
         gameLogo.setTextSize(getResponsiveTextSize(2048)*1.8f);
         gameLogo.setText("2048");
         gameLogo.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
@@ -166,35 +165,16 @@ public class GameActivity extends AppCompatActivity {
         gameLogo.setWidth((int) (displayWidth/3*1.15));
         gameLogo.setHeight((int) (displayWidth/3*1.15));
         gameLogo.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.tier4_2)));
+        gameLogo.setId(View.generateViewId());
+        gameLayout.addView(gameLogo);
 
         currentScore = new ScoreBox(getBaseContext(), 2560, "Score");
         currentScore.setId(View.generateViewId());
+        gameLayout.addView(currentScore);
 
         bestScore = new ScoreBox(getBaseContext(), 1111111111, "Best");
         bestScore.setId(View.generateViewId());
-
-
-
-
-
-        scoreBoxesContainer = new LinearLayout(getApplicationContext());
-        scoreBoxesContainer.setOrientation(LinearLayout.VERTICAL);
-        setScoreBoxesContainerParams(bestScore, 16, 16);
-        setScoreBoxesContainerParams(currentScore, 16, 16);
-
-        scoreBoxesContainer.addView(bestScore);
-        scoreBoxesContainer.addView(currentScore);
-
-
-
-
-
-
-
-
-        int spacing = 24;
-
-
+        gameLayout.addView(bestScore);
 
         grid = new Grid(getBaseContext(), 4, 4);
         grid.setId(View.generateViewId());
@@ -307,13 +287,6 @@ public class GameActivity extends AppCompatActivity {
     private void setFooterParams(View view, int lMargin, int rMargin) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT, 1f);
         params.setMargins(lMargin,0, rMargin,0);
-
-        view.setLayoutParams(params);
-    }
-
-    private void setScoreBoxesContainerParams(View view, int topMargin, int botMargin) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-        params.setMargins(0, topMargin, 0, botMargin);
 
         view.setLayoutParams(params);
     }
