@@ -9,7 +9,7 @@
 
     public class Grid extends GridLayout {
         private int gridWidth, gridHeight;
-        private final Block[][] gameBlockMatrix;
+        private final Block[][] gridMatrix;
         Context gameBlockStyledContext = new ContextThemeWrapper(this.getContext(), R.style.GameBlockStyle); // Context with custom style is created
 
 
@@ -17,7 +17,7 @@
             super(context);
             this.gridWidth = gridWidth;
             this.gridHeight = gridHeight;
-            this.gameBlockMatrix = new Block[gridHeight][gridWidth];
+            this.gridMatrix = new Block[gridHeight][gridWidth];
             this.initGrid();
             this.valueToRandomGameBlock();
         }
@@ -29,7 +29,7 @@
             boolean gameOver = false;
 
             // If random position value isn't empty (0) regenerate a random position.
-            while (gameBlockMatrix[randomWidth][randomHeight].getValue() != 0 && !gameOver) {
+            while (gridMatrix[randomWidth][randomHeight].getValue() != 0 && !gameOver) {
                 if (counter > gridWidth + gridHeight) {
                     gameOver = true;
                 }
@@ -43,7 +43,7 @@
             if (gameOver) {
                 // Player loses
             } else {
-                gameBlockMatrix[randomWidth][randomHeight].setValue(2); // Add new gameBlock
+                gridMatrix[randomWidth][randomHeight].setValue(2); // Add new gameBlock
             }
         }
 
@@ -73,7 +73,7 @@
         private void moveAndMergeTiles(int row, int col, String direction, boolean[][] merged) {
             boolean sweepHandled = false;
 
-            if (gameBlockMatrix[row][col].getValue() == 0 || merged[row][col]) {
+            if (gridMatrix[row][col].getValue() == 0 || merged[row][col]) {
                 return; // Skip empty cells
             }
 
@@ -97,16 +97,16 @@
 
             // While in bounds
             while (inBounds(nextRow, nextCol, gridHeight, gridWidth) && !sweepHandled) {
-                if (this.gameBlockMatrix[nextRow][nextCol].getValue() == 0) {
+                if (this.gridMatrix[nextRow][nextCol].getValue() == 0) {
                     // Move the tile
-                    this.gameBlockMatrix[nextRow][nextCol].setValue(gameBlockMatrix[currentRow][currentCol].getValue());
-                    this.gameBlockMatrix[currentRow][currentCol].setValue(0);
+                    this.gridMatrix[nextRow][nextCol].setValue(gridMatrix[currentRow][currentCol].getValue());
+                    this.gridMatrix[currentRow][currentCol].setValue(0);
                     currentRow = nextRow;
                     currentCol = nextCol;
-                } else if (gameBlockMatrix[currentRow][currentCol].getValue() == gameBlockMatrix[nextRow][nextCol].getValue() && !merged[nextRow][nextCol]) {
+                } else if (gridMatrix[currentRow][currentCol].getValue() == gridMatrix[nextRow][nextCol].getValue() && !merged[nextRow][nextCol]) {
                     // Merge the tiles
-                    gameBlockMatrix[nextRow][nextCol].setValue(gameBlockMatrix[nextRow][nextCol].getValue() * 2);
-                    gameBlockMatrix[currentRow][currentCol].setValue(0);
+                    gridMatrix[nextRow][nextCol].setValue(gridMatrix[nextRow][nextCol].getValue() * 2);
+                    gridMatrix[currentRow][currentCol].setValue(0);
                     merged[nextRow][nextCol] = true;
                     sweepHandled = true;
                 } else {
@@ -132,16 +132,20 @@
 
 
         public void addGameBlockToMatrix(Block gb) {
-            gameBlockMatrix[gb.getPosX()][gb.getPosY()] = gb;
+            gridMatrix[gb.getPosX()][gb.getPosY()] = gb;
         }
 
         public void initGrid() {
+            int spacing = (int) (getDisplayWidth()*0.012f);
 
-            for (int x = 0; x < gridWidth; x++) {
-                for (int y = 0; y < gridHeight; y++) {
-                    Block newGameBlock = new Block(gameBlockStyledContext, x, y, 0);
+            for (int col = 0; col < gridWidth; col++) {
+                for (int row = 0; row < gridHeight; row++) {
+                    Block b = new Block(gameBlockStyledContext, col, row, 0);
 
-                    this.addGameBlockToMatrix(newGameBlock);
+                    b.getTextView().setTextSize(getResponsiveTextSize(b.getValue()));
+                    this.addGameBlockToMatrix(b);
+                    this.addView(b, createGridParams(col, row, spacing));
+
                 }
             }
         }
@@ -162,6 +166,26 @@
             return displayMetrics.widthPixels;
         }
 
+        public int getResponsiveTextSize(int val) {
+            int baseSize = (int) (getDisplayWidth()*0.05);
+            float scaleFactor = 0.83f;
+
+            int valDigits = String.valueOf(val).length();
+
+            return (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
+        }
+
+        public GridLayout.LayoutParams createGridParams(int x, int y, int spacing) {
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.rowSpec = GridLayout.spec(x);
+            params.columnSpec = GridLayout.spec(y);
+            params.setMargins(spacing,spacing,spacing,spacing);
+            this.setPadding(spacing, spacing, spacing, spacing);
+
+            return params;
+        }
+
         public int getGridWidth() {
             return gridWidth;
         }
@@ -179,6 +203,6 @@
         }
 
         public Block[][] getGameBlockMatrix() {
-            return gameBlockMatrix;
+            return gridMatrix;
         }
     }

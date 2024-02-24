@@ -3,6 +3,7 @@ package com.example.a2048;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -27,8 +28,9 @@ public class Block extends FrameLayout {
 
     // METHODS
     public void addComponentsToLayout() {
-        this.textView.setLayoutParams(createFrameLayoutParams());
-        this.addView(textView);
+        textView.setLayoutParams(createFrameLayoutParams());
+        textView.setGravity(Gravity.CENTER);
+        addView(textView);
     }
 
     public void setBlockTier(int value) {

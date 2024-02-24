@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
-    int displayWidth, displayHeight;
     ScoreBox currentScore, bestScore;
     TextView gameLogo;
     Grid grid;
@@ -87,31 +86,27 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 Log.d("Gesture", "Fling detected: " + direction);
-                updateGameGrid(direction);
+                updateGameActivity(direction);
                 return true;
             }
         });
 
 
-        // Responsive spacing between blocks
-        saveDisplaySize();
-        int spacing = (int) (displayWidth*0.012f);
-        int baseSize = (int) (displayWidth*0.05);
-        float scaleFactor = 0.83f;
-        int valDigits = String.valueOf(2048).length();
-        int textSize = (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
-        int val = 2;
-
         addComponentsToLayout();
         configureConstraints();
+        stylizeComponents();
     }
 
 
     // METHODS
-    private void updateGameGrid(String direction) {
+    private void updateGameActivity(String direction) {
         grid.handleSweep(direction);
         grid.valueToRandomGameBlock();
         resizeGameBlockText();
+        currentScore.setScoreValue(currentScore.getScoreValue() + 25);
+        String scoreString = String.valueOf(currentScore.getScoreValue());
+
+        currentScore.getScoreTextView().setText(scoreString);
         //redrawGridLayout();
 
     }
@@ -124,63 +119,43 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void redrawGridLayout() {
-        int spacing = (int) (displayWidth*0.012f);
-        grid.removeAllViews();
 
-        for (int x = 0; x < 4; x++) {           // Column (x)
-            for (int y = 0; y < 4; y++) {       // Row (y)
-                GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
-                grid.addView(grid.getGameBlockMatrix()[x][y], params);
-            }
-        }
-    }
+    private void stylizeComponents() {
+        gameLayout.setBackgroundResource(R.drawable.rounded_corners);
 
-    private void initGameGridLayout() {
-        int spacing = (int) (displayWidth*0.012f);
-
-        for (int x = 0; x < 4; x++) {           // Column (x)
-            for (int y = 0; y < 4; y++) {       // Row (y)
-                Block block = grid.getGameBlockMatrix()[x][y];
-
-                block.getTextView().setTextSize(getResponsiveTextSize(block.getValue()));
-
-                GridLayout.LayoutParams params = createGridLayoutParams(x, y, spacing);
-                grid.addView(grid.getGameBlockMatrix()[x][y], params);
-            }
-        }
-    }
-
-    private void addComponentsToLayout() {
-        int spacing = 24;
-        mainTypeface = ResourcesCompat.getFont(this, R.font.baloo_bhai_2_bold);
-
-        gameLogo = new TextView(getBaseContext());
         gameLogo.setTextSize(getResponsiveTextSize(2048)*1.8f);
         gameLogo.setText("2048");
         gameLogo.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
         gameLogo.setGravity(Gravity.CENTER);
         gameLogo.setShadowLayer(5, 6, 6, ContextCompat.getColor(this.getBaseContext(), R.color.shadowColor));
         gameLogo.setTypeface(ResourcesCompat.getFont(getBaseContext(), R.font.baloo_bhai_2_bold));
-        gameLogo.setWidth((int) (displayWidth/3*1.15));
-        gameLogo.setHeight((int) (displayWidth/3*1.15));
+        gameLogo.setWidth((int) (getDisplayWidth()/3*1.15));
+        gameLogo.setHeight((int) (getDisplayWidth()/3*1.15));
         gameLogo.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.tier4_2)));
+
+        grid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
+    }
+
+
+    private void addComponentsToLayout() {
+        int spacing = 24;
+        mainTypeface = ResourcesCompat.getFont(this, R.font.baloo_bhai_2_bold);
+
+        gameLogo = new TextView(getBaseContext());
         gameLogo.setId(View.generateViewId());
         gameLayout.addView(gameLogo);
 
-        currentScore = new ScoreBox(getBaseContext(), 2560, "Score");
+        currentScore = new ScoreBox(getBaseContext(), 0, "Score");
         currentScore.setId(View.generateViewId());
         gameLayout.addView(currentScore);
 
-        bestScore = new ScoreBox(getBaseContext(), 1111111111, "Best");
+        bestScore = new ScoreBox(getBaseContext(), 0, "Best");
         bestScore.setId(View.generateViewId());
         gameLayout.addView(bestScore);
 
         grid = new Grid(getBaseContext(), 4, 4);
         grid.setId(View.generateViewId());
-        grid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
         gameLayout.addView(grid);
-        initGameGridLayout();
 
         footer = new LinearLayout(getBaseContext());
         footer.setId(View.generateViewId());
@@ -262,12 +237,6 @@ public class GameActivity extends AppCompatActivity {
         cs.applyTo(gameLayout);
     }
 
-
-    public void refreshGrid(GridLayout gameGrid) {
-        gameGrid.invalidate();
-        gameGrid.requestLayout();
-    }
-
     private GradientDrawable getDrawableBackground(int BGColor) {
         GradientDrawable newBackground = new GradientDrawable();
         newBackground.setShape(GradientDrawable.RECTANGLE);
@@ -291,16 +260,8 @@ public class GameActivity extends AppCompatActivity {
         view.setLayoutParams(params);
     }
 
-    public void saveDisplaySize(){
-        // Getting display width and height
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        displayWidth = displayMetrics.widthPixels;
-        displayHeight = displayMetrics.heightPixels;
-    }
-
     public int getResponsiveTextSize(int val) {
-        int baseSize = (int) (displayWidth*0.05);
+        int baseSize = (int) (getDisplayWidth()*0.05);
         float scaleFactor = 0.83f;
 
         int valDigits = String.valueOf(val).length();
@@ -318,21 +279,8 @@ public class GameActivity extends AppCompatActivity {
 
         return params;
     }
-
-    // GETTERS AND SETTERS
-    public int getDisplayWidth() {
-        return displayWidth;
-    }
-
-    public void setDisplayWidth(int displayWidth) {
-        this.displayWidth = displayWidth;
-    }
-
-    public int getDisplayHeight() {
-        return displayHeight;
-    }
-
-    public void setDisplayHeight(int displayHeight) {
-        this.displayHeight = displayHeight;
+    public int getDisplayWidth(){
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        return displayMetrics.widthPixels;
     }
 }

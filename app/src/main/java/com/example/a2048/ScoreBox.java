@@ -81,7 +81,7 @@ public class ScoreBox extends ConstraintLayout {
     }
 
     public void giveStyleToComponents() {
-        this.setBackground(getDrawableBackground(ContextCompat.getColor(this.getContext(), R.color.dark_brown)));
+        this.setBackground(getDrawableBackground(ContextCompat.getColor(this.getContext(), R.color.brown)));
 
         // Edit Style
         scoreLabel.setTextColor(ContextCompat.getColor(this.getContext(), R.color.beige));
