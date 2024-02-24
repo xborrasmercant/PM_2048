@@ -26,7 +26,7 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements MergeListener {
     ScoreBox currentScore, bestScore;
     TextView gameLogo;
     Grid grid;
@@ -84,14 +84,12 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 Log.d("Gesture", "Fling detected: " + direction);
                 updateGameActivity(direction);
                 return true;
             }
         });
-
-
+        
         addComponentsToLayout();
         configureConstraints();
         stylizeComponents();
@@ -103,12 +101,6 @@ public class GameActivity extends AppCompatActivity {
         grid.handleSweep(direction);
         grid.valueToRandomGameBlock();
         resizeGameBlockText();
-        currentScore.setScoreValue(currentScore.getScoreValue() + 25);
-        String scoreString = String.valueOf(currentScore.getScoreValue());
-
-        currentScore.getScoreTextView().setText(scoreString);
-        //redrawGridLayout();
-
     }
 
     public void resizeGameBlockText() {
@@ -134,8 +126,24 @@ public class GameActivity extends AppCompatActivity {
         gameLogo.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.tier4_2)));
 
         grid.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
-    }
 
+        int footerTextSize = 32;
+
+        footer.setGravity(Gravity.CENTER);
+        footer.setOrientation(LinearLayout.HORIZONTAL);
+
+        undoBtn.setText("UNDO");
+        undoBtn.setTypeface(mainTypeface);
+        undoBtn.setTextSize(footerTextSize);
+        undoBtn.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
+        undoBtn.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
+
+        resetBtn.setText("RESET");
+        resetBtn.setTypeface(mainTypeface);
+        resetBtn.setTextSize(footerTextSize);
+        resetBtn.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
+        resetBtn.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
+    }
 
     private void addComponentsToLayout() {
         int spacing = 24;
@@ -145,45 +153,33 @@ public class GameActivity extends AppCompatActivity {
         gameLogo.setId(View.generateViewId());
         gameLayout.addView(gameLogo);
 
-        currentScore = new ScoreBox(getBaseContext(), 0, "Score");
-        currentScore.setId(View.generateViewId());
-        gameLayout.addView(currentScore);
-
         bestScore = new ScoreBox(getBaseContext(), 0, "Best");
         bestScore.setId(View.generateViewId());
         gameLayout.addView(bestScore);
 
+        currentScore = new ScoreBox(getBaseContext(), 0, "Score");
+        currentScore.setId(View.generateViewId());
+        gameLayout.addView(currentScore);
+
+
         grid = new Grid(getBaseContext(), 4, 4);
         grid.setId(View.generateViewId());
+        grid.setMergeListener(this);
         gameLayout.addView(grid);
 
         footer = new LinearLayout(getBaseContext());
         footer.setId(View.generateViewId());
-        footer.setGravity(Gravity.CENTER);
-        footer.setOrientation(LinearLayout.HORIZONTAL);
         gameLayout.addView(footer);
         extendViewWidth(footer);
 
-        int footerTextSize = 32;
-
         undoBtn = new Button(getBaseContext());
         undoBtn.setId(View.generateViewId());
-        undoBtn.setText("UNDO");
-        undoBtn.setTypeface(mainTypeface);
-        undoBtn.setTextSize(footerTextSize);
-        undoBtn.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
-        undoBtn.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
         setFooterParams(undoBtn, 0, 16);
         footer.addView(undoBtn);
 
         resetBtn = new Button(getBaseContext());
         resetBtn.setId(View.generateViewId());
-        resetBtn.setText("RESET");
-        resetBtn.setTypeface(mainTypeface);
-        resetBtn.setTextSize(footerTextSize);
-        resetBtn.setTextColor(ContextCompat.getColor(this.getBaseContext(), R.color.light_beige));
-        resetBtn.setBackground(getDrawableBackground(ContextCompat.getColor(this.getBaseContext(), R.color.brown)));
-        resetBtn.setOnClickListener(v -> grid.resetGrid());
+        resetBtn.setOnClickListener(v -> resetGame());
         setFooterParams(resetBtn, 16, 0);
         footer.addView(resetBtn);
     }
@@ -237,6 +233,12 @@ public class GameActivity extends AppCompatActivity {
         cs.applyTo(gameLayout);
     }
 
+    private void resetGame() {
+        grid.resetGrid();
+        bestScore.setScoreValue(0);
+        currentScore.setScoreValue(0);
+    }
+
     private GradientDrawable getDrawableBackground(int BGColor) {
         GradientDrawable newBackground = new GradientDrawable();
         newBackground.setShape(GradientDrawable.RECTANGLE);
@@ -283,4 +285,15 @@ public class GameActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         return displayMetrics.widthPixels;
     }
+
+    @Override
+    public void onMerged(int mergedValue) {
+        // Assuming each merge increases score by the value of the merged block
+        currentScore.setScoreValue(currentScore.getScoreValue() + mergedValue);
+
+        if (bestScore.getScoreValue() < currentScore.getScoreValue()) {
+            bestScore.setScoreValue(currentScore.getScoreValue());
+        }
+    }
+
 }

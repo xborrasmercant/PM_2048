@@ -10,8 +10,8 @@
     public class Grid extends GridLayout {
         private int gridWidth, gridHeight;
         private final Block[][] gridMatrix;
-        Context gameBlockStyledContext = new ContextThemeWrapper(this.getContext(), R.style.GameBlockStyle); // Context with custom style is created
-
+        private Context gameBlockStyledContext = new ContextThemeWrapper(this.getContext(), R.style.GameBlockStyle); // Context with custom style is created
+        private MergeListener mergeListener;
 
         public Grid(Context context, int gridWidth, int gridHeight) {
             super(context);
@@ -105,7 +105,11 @@
                     currentCol = nextCol;
                 } else if (gridMatrix[currentRow][currentCol].getValue() == gridMatrix[nextRow][nextCol].getValue() && !merged[nextRow][nextCol]) {
                     // Merge the tiles
+
                     gridMatrix[nextRow][nextCol].setValue(gridMatrix[nextRow][nextCol].getValue() * 2);
+                    if (mergeListener != null) {
+                        mergeListener.onMerged(gridMatrix[nextRow][nextCol].getValue());
+                    }
                     gridMatrix[currentRow][currentCol].setValue(0);
                     merged[nextRow][nextCol] = true;
                     sweepHandled = true;
@@ -129,12 +133,9 @@
                 return false;
             }
         }
-
-
-        public void addGameBlockToMatrix(Block gb) {
-            gridMatrix[gb.getPosX()][gb.getPosY()] = gb;
+        public void addBlockToMatrix(Block b) {
+            gridMatrix[b.getPosX()][b.getPosY()] = b;
         }
-
         public void initGrid() {
             int spacing = (int) (getDisplayWidth()*0.012f);
 
@@ -143,15 +144,15 @@
                     Block b = new Block(gameBlockStyledContext, col, row, 0);
 
                     b.getTextView().setTextSize(getResponsiveTextSize(b.getValue()));
-                    this.addGameBlockToMatrix(b);
+                    this.addBlockToMatrix(b);
                     this.addView(b, createGridParams(col, row, spacing));
 
                 }
             }
         }
-
         public void resetGrid(){
-            int spacing = (int) (getDisplayWidth()*0.012f);
+
+
             for (Block[] row : this.getGameBlockMatrix()) {
                 for (Block b : row) {
                     b.setValue(0);
@@ -160,12 +161,10 @@
 
             valueToRandomGameBlock();
         }
-
         public int getDisplayWidth(){
             DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
             return displayMetrics.widthPixels;
         }
-
         public int getResponsiveTextSize(int val) {
             int baseSize = (int) (getDisplayWidth()*0.05);
             float scaleFactor = 0.83f;
@@ -174,7 +173,6 @@
 
             return (int) (baseSize * Math.pow(scaleFactor, valDigits - 1));
         }
-
         public GridLayout.LayoutParams createGridParams(int x, int y, int spacing) {
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -186,23 +184,26 @@
             return params;
         }
 
+
+
+
+        // GETTERS and SETTERS
         public int getGridWidth() {
             return gridWidth;
         }
-
         public void setGridWidth(int gridWidth) {
             this.gridWidth = gridWidth;
         }
-
         public int getGridHeight() {
             return gridHeight;
         }
-
         public void setGridHeight(int gridHeight) {
             this.gridHeight = gridHeight;
         }
-
         public Block[][] getGameBlockMatrix() {
             return gridMatrix;
+        }
+        public void setMergeListener(MergeListener mergeListener) {
+            this.mergeListener = mergeListener;
         }
     }

@@ -122,6 +122,7 @@ public class ScoreBox extends ConstraintLayout {
 
     public void setScoreValue(int scoreValue) {
         this.scoreValue = scoreValue;
+        this.scoreTextView.setText(String.valueOf(scoreValue));
     }
 
     public TextView getScoreLabel() {
@@ -134,9 +135,5 @@ public class ScoreBox extends ConstraintLayout {
 
     public TextView getScoreTextView() {
         return scoreTextView;
-    }
-
-    public void setScoreTextView(TextView scoreTextView) {
-        this.scoreTextView = scoreTextView;
     }
 }
